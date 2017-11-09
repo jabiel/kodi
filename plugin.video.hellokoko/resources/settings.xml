@@ -1,26 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-  <category label="Ogolne">
-    <setting id="xxxmode" type="bool" label="30799"   default="flase" />
-    <setting id="appearance" type="select" label="30801" values="-|Standard|Clean" default="standard" />
-    <setting id="fanart" type="bool" label="30802" default="true" visible="false" />
-    <setting id="infoLang" visible="false" type="select" label="30803" values="bg|cs|da|de|el|en|es|fi|fr|he|hr|hu|it|ja|ko|nl|no|pl|pt|ru|sl|sv|tr|zh" default="en" />
-    <setting id="playback_quality" visible="false"  type="enum" label="30831" values="1080p|720p|SD|LQ" default="0" />
-    <setting type="sep" />
-    <setting id="sources_timeout_40" type="slider" label="30804" default="40" range="10,60" option="int" />
-    <setting label="40010" type="lsep"/>
-    <setting id="pl_proxy" type="text" label="40011" default=""/>
-    <setting id="pl_proxy_port" type="text" label="40012" default=""/>
-  </category>
-
-  <category label="Konto Kokosik">
+  <category label="Ustawienia">
     <setting type="lsep" label="Kokosik" />
     <setting id="kokosik.user" type="text" label="Nazwa uzytkownika" default="" />
     <setting id="kokosik.pass" type="text" option="hidden" visible="true" label="Haslo" default="" />
     <setting id="kokosik.cookie" type="text" visible="false" default="" />
 
+    <setting type="lsep" />
+    <setting id="debugmode" type="bool" label="30799"   default="flase" />
+    <setting type="lsep" label="Ustawienia proxy" />
+    <setting id="pl_proxy" type="text" label="Server" default=""/>
+    <setting id="pl_proxy_port" type="text" label="Port" default=""/>
   </category>
-  <setting id="current_ua" type="text" visible="false"/>
-  <setting id="last_ua_create" type="number" default="0" visible="false"/>
-
 </settings>

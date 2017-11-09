@@ -19,8 +19,7 @@ line3 = "Z kodiego"
 baseUrl = 'http://kokosik1207.pl'
 
 mainMenu = [
-             ["[COLOR=blue]test1[/COLOR] [COLOR=red]test2[/COLOR]","0","Test1"],
-             ["Ostatnio dodane",'/newposts/',"FilmList"],
+             ["[COLOR=blue]Ostatnio dodane[/COLOR]",'/newposts/',"FilmList"],
              ["Seriale",'/seriale/',"FilmList"],
 			 ["Gatunek",'g',"SubCategory"],
 			 ["Wersja",'w',"SubCategory"],
@@ -33,13 +32,30 @@ gatMenu = [
 			 ["Animowane",'/animowane',"FilmList"],
 			 ["Biograficzne",'/biograficzne',"FilmList"],
 			 ["Dokumentalne",'/dokument',"FilmList"],
-             ["Dramat","/dramat","FilmList"]
+             ["Dramat","/dramat","FilmList"],
+			 ["Familijny","/familijny","FilmList"],
+			 ["Fantasy","/fantasy","FilmList"],
+			 ["Historyczny","/historyczny","FilmList"],
+			 ["Horror","/horror","FilmList"],
+			 ["Katastroficzny","/katastroficzny","FilmList"],
+			 ["Komedia","/komedia","FilmList"],
+			 ["Kryminal","/kryminal","FilmList"],
+			 ["Przygodowy","/przygodowy","FilmList"],
+			 ["Psychologiczny","/psychologiczny","FilmList"],
+			 ["Romans","/romans","FilmList"],
+			 ["Sci-Fi","/sci-fi","FilmList"],
+			 ["Sensacyjny","/sensacyjny","FilmList"],
+			 ["Thriller","/thriller","FilmList"],
+			 ["Western","/western","FilmList"]
             ]
 
 werMenu = [
              ["Film polski",'/xfsearch/polski',"FilmList"],
+			 ["Napisy PL",'/xfsearch/napisy+pl',"FilmList"],
 			 ["Lektor PL",'/xfsearch/lektor+pl',"FilmList"],
-			 ["Napisy PL",'/xfsearch/napisy+pl',"FilmList"]
+			 ["Lektor amatorski",'/xfsearch/lektor+amatorski',"FilmList"],
+			 ["Dubbing PL",'/xfsearch/dubbing',"FilmList"],
+			 ["Inne",'/xfsearch/inne',"FilmList"]
             ]
 
 rokMenu = [
@@ -47,7 +63,10 @@ rokMenu = [
 			 ["2016",'/xfsearch/2016',"FilmList"],
 			 ["2015",'/xfsearch/2015',"FilmList"],
 			 ["2014",'/xfsearch/2014',"FilmList"],
-             ["2013","/xfsearch/2013","FilmList"]
+             ["2013","/xfsearch/2013","FilmList"],
+             ["2012","/xfsearch/2012","FilmList"],
+             ["2011","/xfsearch/2011","FilmList"],
+			 ["2010","/xfsearch/2010","FilmList"]
             ]
 
 def addMenu(name,url,mode,folder,contextmenu='',info='',icon='',content='',premium='',isPlayable = False, param1='',param2='',param3=''):
@@ -150,20 +169,11 @@ param1 = params.get('param1') or None
 param2 = params.get('param2') or None
 param3 = params.get('param3') or None
 ######################################
-videolink = 'http://198.16.68.98/2rjxp26t7mqwws4phxxt65oe4m67wdx2jgofb3y4244tt6mds4cqhkmgefia/video.mp4';
 
 if mode==None:
         buildMenu(mainMenu)
         xbmcplugin.endOfDirectory(addon_handle)
         checkHasCredentials()
-elif mode=='Test1':  
-		#xbmcgui.Dialog().ok(addonname, mode, 'Test1', videolink)    
-		play2(videolink)
-		#xbmcplugin.setResolvedUrl(addon_handle, True, xbmcgui.ListItem(path=videolink))
-		#xbmc.sleep( 1000 )
-		#while xbmc.Player().isPlaying():
-		#	stoptime = time.clock()
-		#	xbmc.sleep( 1000 )
 			
 elif mode=='FilmList':
 		filmList(url)

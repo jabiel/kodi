@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.hellokoko"
-       name="Kokosic"
+       name="Hello Koko"
        version="2017.11.05"
-       provider-name="Kokosic">
+       provider-name="HelloKoko">
   <requires>
     <import addon="xbmc.python" version="2.14.0"/>
   </requires>
@@ -11,7 +11,7 @@
         <provides>video</provides>
   </extension>
   <extension point="xbmc.addon.metadata">
-    <summary>Wtyczka Kokosic!</summary>
+    <summary>Wtyczka Hello Koko</summary>
     <description>Wtyczka pozwala ogladac filmy z servera kokosik1207.pl</description>
     <platform>all</platform>
   </extension>

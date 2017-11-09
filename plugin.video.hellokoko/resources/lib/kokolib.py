@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import re, os.path
 import urllib, urllib2, urlparse, cookielib
-import string
+import string, json
 from resources.lib import aadecode
 
 rot13 = string.maketrans( 
@@ -189,7 +189,7 @@ def httpRequest(params = {}, post_data = None):
 	return out_data
 # retuurn True, url or False, Error message
 def findMovieUrl(url):
-	html = kokolib.httpRequest({ 'url': url, 'return_data': True })
+	html = httpRequest({ 'url': url, 'return_data': True })
 	if("videowood.tv" in url):
 		addrscr = aadecode.decode(html)
 		if addrscr:
@@ -199,11 +199,17 @@ def findMovieUrl(url):
 			return False, "Nie znalazlem filmu na videowood.tv"
 		return False, "Nie znalazlem aacode na videowood.tv"
 
-	if ("vidto.me" in url or "fileone.tv" in url):
+	if ("vidto.me" in url):
 		addr = re.compile('file:"(.*?)"').findall(html)
 		if(len(addr)>0):
 				return True, addr[0]
-		return False, "Nie znalazlem filmu na vidto.me"
+		return False, "Nie znalazlem filmu na vidto.me" 
+
+	if ("fileone.tv" in url):
+		addr = re.compile("file: '(.*?)'").findall(html)
+		if(len(addr)>0):
+				return True, addr[0]
+		return False, "Nie znalazlem filmu na fileone.tv" 
 
 	if ("stormo.tv" in url): # https://www.stormo.tv/embed/209929/
 		addr = re.compile("file: '(.*?)'").findall(html)
@@ -213,7 +219,7 @@ def findMovieUrl(url):
 	if("openload." in url): # https://openload.co/embed/CHGRbVp4xiU
 		movieParams = re.compile('(?://|\.)(openload\.(?:io|co))/(?:embed|f)/([0-9a-zA-Z-_]+)').findall(url)[0] # ('openload.co', 'CHGRbVp4xiU')
 		apiUrl = 'https://api.openload.co/1/streaming/get?file=' + movieParams[1]
-		jss = kokolib.httpRequest({ 'url': apiUrl, 'return_data': True })
+		jss = httpRequest({ 'url': apiUrl, 'return_data': True })
 		zz = json.loads(jss)
 		if(zz['status'] != 200):
 			return False, zz['msg'] # IP address not authorized. Visit https:\/\/olpair.com

@@ -27,6 +27,7 @@
     <Compile Include="plugin.video.hellokoko\resources\lib\aadecode.py" />
     <Compile Include="plugin.video.hellokoko\resources\lib\kokolib.py" />
     <Compile Include="plugin.video.hellokoko\resources\lib\__init__.py" />
+    <Compile Include="plugin.video.hellokoko\resources\__init__.py" />
     <Compile Include="resources\lib\aadecode.py">
       <SubType>Code</SubType>
     </Compile>
