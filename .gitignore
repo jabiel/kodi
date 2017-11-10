@@ -260,3 +260,5 @@ paket-files/
 __pycache__/
 *.pyc
 /plugin.video.hellokoko.zip
+/koko_pageing.html
+/kokosik_search.html

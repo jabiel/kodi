@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-from resources.lib import kokolib
-from resources.lib import aadecode
+# from resources.lib import kokolib
+# from resources.lib import aadecode
 import re
 import json
+import imp
+kokolib = imp.load_source('kokolib', '.\\plugin.video.hellokoko\\resources\\lib\\kokolib.py')
 	
 # znalezione na stronie kokosika w javascrypcie
 #defalc13="Vidto^$2^$0^$%@%ivqgb.zr/rzorq-dibclbsn98w1-640k360.ugzy^%^Vidto^$2^$1^$%@%ivqgb.zr/rzorq-ghqg1lxau7we-640k360.ugzy^%^Vidto^$0^$0^$^%^Vidto^$0^$0^$^%^Videowood^$2^$0^$%@%ivqrbjbbq.gi/rzorq/1nhk6^%^Videowood^$0^$0^$^%^Videowood^$0^$0^$^%^Videowood^$0^$0^$^%^Fileone^$2^$0^$%@%svyrbar.gi/i/59fee045f09fd^%^Fileone^$2^$1^$%@%svyrbar.gi/i/59fee0a1c3aa8^%^Fileone^$0^$0^$^%^Fileone^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^Streamango VIP^$2^$0^$f%@%fgernznatb.pbz/rzorq/zabfyxdeqbngfeea/Ohaalzna_Iratrnapr_2017_CY_FHOORQ_JRO-QY_KIvQ-ZBEF_niv^%^Streamango VIP^$2^$1^$f%@%fgernznatb.pbz/rzorq/rcpgdbxgyaqgepcn/Ohaalzna_Iratrnapr_2017_CY_FHOORQ_480c_JRO-QY_KIvQ_NP3-ZBEF_niv^%^Streamango VIP^$2^$2^$^%^Streamango VIP^$0^$0^$^%^Streamango VIP^$0^$0^$^%^Streamango VIP^$0^$0^$^%^Openload VIP^$2^$0^$f%@%bcraybnq.pb/rzorq/d4CojzfCbY4/Ohaalzna_Iratrnapr_%282017%29_CY.FHOORQ.JRO-QY.KIvQ-ZBEF.niv^%^Openload VIP^$2^$1^$^%^Openload VIP^$2^$2^$^%^Openload VIP^$0^$0^$^%^Openload VIP^$0^$0^$^%^Openload VIP^$0^$0^$"
@@ -54,10 +56,16 @@ import json
 #print scr #"http:" + re.compile("http:(.*?).mp4").findall(scr)[0] + ".mp4"
 
 
-apiUrl = 'https://api.openload.co/1/streaming/get?file=' + 'CHGRbVp4xiU'
-js = kokolib.httpRequest({ 'url': apiUrl, 'return_data': True })
-print js
+#apiUrl = 'https://api.openload.co/1/streaming/get?file=' + 'CHGRbVp4xiU'
+#js = kokolib.httpRequest({ 'url': apiUrl, 'return_data': True })
+#print js
 #js = '{"status":200,"msg":"OK","result":{"name":"Atomic.Blonde.2017.PLSUBBED.BRRiP.XViD-K12.avi.mp4","size":"517819521","sha1":"114f23fda41682190984aa8b0b33d7df71e64909","content_type":"video\/mp4","upload_at":"2017-11-03 07:04:20","url":"https:\/\/oqfnwn.oloadcdn.net\/dl\/l\/kl14zjugIKaalffa\/CHGRbVp4xiU\/Atomic.Blonde.2017.PLSUBBED.BRRiP.XViD-K12.avi.mp4?mime=true","token":"kl14zjugIKaalffa"}}'
 
 #zz = json.loads(js)
 #print zz['result']['url']
+
+f = open('koko_pageing.html')
+html = f.read()
+pp = kokolib.getTitleList(html)
+print pp
+

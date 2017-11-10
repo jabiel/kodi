@@ -24,7 +24,8 @@ mainMenu = [
 			 ["Gatunek",'g',"SubCategory"],
 			 ["Wersja",'w',"SubCategory"],
 			 ["Rok",'r',"SubCategory"],
-             ["Narzedzia","0","Tools"]
+             ["Narzedzia","0","Tools"],
+			 ["[COLOR=green]Szukaj[/COLOR]","0","Search"]
             ]
 			
 gatMenu = [
@@ -69,23 +70,24 @@ rokMenu = [
 			 ["2010","/xfsearch/2010","FilmList"]
             ]
 
-def addMenu(name,url,mode,folder,contextmenu='',info='',icon='',content='',premium='',isPlayable = False, param1='',param2='',param3=''):
-    u=sysaddon+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(icon)+"&content="+content+"&premium="+premium+"&param1="+urllib.quote_plus(param1)+"&param2="+urllib.quote_plus(param2)+"&param3="+urllib.quote_plus(param3)
-    
+def addMenu(name,url,mode,folder,contextmenu='',info='',icon='',isPlayable = False, img = ''):    
     liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=icon)
     liz.setInfo( type="video", infoLabels = info )
+    if img:
+        liz.setArt({ "poster": img  }) # "fanart": "https://image.tmdb.org/t/p/w185/weUSwMdQIa3NaXVzwUoIIcAi85d.jpg"
     if isPlayable:
         liz.setProperty('IsPlayable', 'True')
     if contextmenu:
         liz.addContextMenuItems(contextmenu)
+
+    u=sysaddon+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&icon="+urllib.quote_plus(icon)+"&content="
     ok=xbmcplugin.addDirectoryItem(handle=addon_handle,url=u,listitem=liz,isFolder=folder)
     return ok
 
 def buildMenu(menuList):
     for i in menuList:
         addMenu(i[0],i[1],i[2],True)
-    #addMenu('[COLOR=green]Szukaj[/COLOR]','0','Search',True)
-
+    
 def subCategory(url):
 	if(url == 'g'):
 		buildMenu(gatMenu)
@@ -96,16 +98,17 @@ def subCategory(url):
 	xbmcplugin.endOfDirectory(addon_handle)
 
 def filmList(url):
-	movieList = kokolib.getTitleList(baseUrl + url)
-	for mm in movieList:
-		addMenu(mm[1],mm[0],'MovieDetails',True)
-		
-	xbmcplugin.endOfDirectory(addon_handle)
-	
-	#def play(stream_url):
-#	play_item = xbmcgui.ListItem(path=stream_url)
-#	play_item.setProperty('IsPlayable','true')
-#	xbmcplugin.setResolvedUrl(addon_handle, True, listitem=play_item)
+    html = kokolib.httpRequest({ 'url':url,  'use_cookie': True, 'cookiefile': cookieFile, 'save_cookie': False, 'load_cookie': True, 'return_data': True })
+    movieList = kokolib.getTitleList(html)
+    pageing = kokolib.getNextPage(html)
+    for mm in movieList:
+        info = { "genre":mm[2], "plot": "[COLOR=blue]" + mm[2] + "[/COLOR]. " + mm[3], "title": mm[1] }
+        addMenu(mm[1],mm[0],'MovieDetails',True, '', info, '', False, mm[4])
+
+    if pageing:
+        addMenu('[COLOR=blue]> Następna strona >[/COLOR] ' + pageing[1], pageing[0],'FilmList', True, '', {"plot":pageing[0]})
+
+    xbmcplugin.endOfDirectory(addon_handle)
 
 # play2 dziala
 def play2(stream_url):
@@ -150,10 +153,34 @@ def movieDetails(url):
 		
 	lst = kokolib.listVideoProviders(html)
 	for z in lst:
-		addMenu(z[0] + " " + z[1] + " "+ z[2],z[3],'FindAndPlay',True)
+		info = { "plot":z[3], "title":"aaa", "rating":"4" }
+		addMenu(z[0] + " " + z[1] + " "+ z[2],z[3],'FindAndPlay',True, '', info)
 		
 	xbmcplugin.endOfDirectory(addon_handle)
-	
+
+def inputSearchText(text=''):
+	textnew = None
+	kb = xbmc.Keyboard(text)
+	kb.doModal()
+	if (kb.isConfirmed()):
+		textnew = kb.getText()
+	return textnew
+
+def search(key):
+    query_data = { 'url': 'http://kokosik1207.pl/', 'use_cookie': True, 'cookiefile': cookieFile, 'save_cookie': False, 'load_cookie': True, 'use_post': True, 'return_data': True }
+    postData   = { 'do': 'search', 'subaction':'search', 'story':key, 'x':'0', 'y':'0' }
+    html = kokolib.httpRequest(query_data, postData)
+    data = kokolib.parseSearchHtml(html)
+
+    for mm in data:
+        info = { "genre":mm[1], "plot": "[COLOR=blue]" + mm[1] + "[/COLOR]. " + mm[3], "title": mm[0] }
+        addMenu(mm[0],mm[2],'MovieDetails',True, '', info)
+
+    #pageing = kokolib.getNextPage(html)
+    #if pageing:
+    #    addMenu('[COLOR=blue]> Następna strona >[/COLOR] ' + pageing[1], pageing[0],'FilmList', True, '', {"plot":pageing[0]})
+
+    xbmcplugin.endOfDirectory(addon_handle)
 
 		
 ## MAIN LOOP
@@ -174,16 +201,24 @@ if mode==None:
         buildMenu(mainMenu)
         xbmcplugin.endOfDirectory(addon_handle)
         checkHasCredentials()
-			
 elif mode=='FilmList':
-		filmList(url)
+        if 'http' not in url:
+            url = baseUrl + url
+        filmList(url)
 elif mode=='MovieDetails':
 		movieDetails(url)
 elif mode=='FindAndPlay':
 		findAndPlayStream(url)
-		#xbmcgui.Dialog().ok(addonname, mode, url, line3)
 elif mode=='SubCategory':
 		subCategory(url)
 elif mode=='Tools':
         toolsMenu()
-		
+elif mode=='Search':
+        key = inputSearchText()
+        if key:            
+			search(key)
+            #key=repPolChars(key)
+            #addHistoryItem(my_addon_name, key)
+            #xbmc.executebuiltin('Container.Refresh')
+elif mode=='SearchFromList':
+        searchFromList(url)

@@ -4,6 +4,7 @@ import urllib, urllib2, urlparse, cookielib
 import string, json
 from resources.lib import aadecode
 
+
 rot13 = string.maketrans( 
     "ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz", 
     "NOPQRSTUVWXYZnopqrstuvwxyzABCDEFGHIJKLMabcdefghijklm")
@@ -36,6 +37,9 @@ def removeDuplicates(seq):
     seen_add = seen.add
     return [x for x in seq if not (x in seen or seen_add(x))]
 
+def stripHtml(text):
+	return re.compile(r'(<!--.*?-->|<[^>]*>)').sub('', text).strip()
+
 def webRequestString(url):
         req = urllib2.Request(url)
         req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0')
@@ -61,13 +65,15 @@ def repPolChars(txt):
         return txt
 
 # publics
-# getTitleList returns list of movies from given url
-def getTitleList(url):
-	html = webRequestString(url)
-	html = repPolChars(html)
-	list2 = re.compile('news-title"><a href="(.*?)">(.*?)<').findall(html)
-	list3 = removeDuplicates(list2)
-	return list3
+
+
+def getNextPage(html):
+    pageshtml = re.compile('<div class="paginator"(.*?)</div>', re.DOTALL).findall(html)
+    if pageshtml:
+        result = re.compile('<a href="(.*?)">(.*?)<', re.DOTALL).findall(pageshtml[0])
+        if len(result)>0:
+            return result[-1]
+    return None
 
 # decrypts kokosik urls with movies
 def decryptDefalc13(dec13):
@@ -230,5 +236,36 @@ def findMovieUrl(url):
 
 	return False, "Nie obslugiwany serwer " + url
 
+def parseSearchHtml(html):
+	rr = re.compile('<div class="News">(.*?)<div class="viewn_details">(.*?)</span>', re.DOTALL).findall(html)
+	tt = re.compile('<div class="Text">(.*?)</div>', re.DOTALL).findall(html)
+	yy = re.compile('Dodaj do ulubionych"></i></a></span></span>(.*?)</span>', re.DOTALL).findall(html)
+	uu = re.compile('<div class="viewn_open"><a href="(.*?)"', re.DOTALL).findall(html)
+	result = []
+	for idx, val in enumerate(rr):
+		result.append((stripHtml(val[1]), stripHtml(yy[idx]),stripHtml(uu[idx]), stripHtml(tt[idx])))
+	return result
 
 
+# getTitleList returns list of movies from given url
+def getTitleList(html):
+    html = repPolChars(html)
+    list2 = re.compile('news-title"><a href="(.*?)">(.*?)<').findall(html)
+    #list3 = removeDuplicates(list2)
+    genres = re.compile('\| Kategoria:(.*?)</span>').findall(html)
+    descs = re.compile('<div class="movie-desc">(.*?)</div>', re.DOTALL).findall(html)
+    imgList = re.compile('yt-c fullfeature(.*?)<div', re.DOTALL).findall(html)
+    
+    imgSrc = re.compile('<img src="(.*?)"')
+    result = []
+    for idx, val in enumerate(list2):
+        title = val[1].replace('*','')
+        genr = stripHtml(genres[idx]).replace('&raquo;','')      
+        imgs = imgSrc.findall(imgList[idx])
+        img = ''
+        if len(imgs)>0:
+            img = imgs[0]
+        # print img
+
+        result.append((val[0], title, stripHtml(genres[idx]),stripHtml(descs[idx]), img))
+    return result
