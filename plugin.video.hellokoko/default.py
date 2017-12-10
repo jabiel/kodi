@@ -24,7 +24,6 @@ mainMenu = [
 			 ["Gatunek",'g',"SubCategory"],
 			 ["Wersja",'w',"SubCategory"],
 			 ["Rok",'r',"SubCategory"],
-             ["Narzedzia","0","Tools"],
 			 ["[COLOR=green]Szukaj[/COLOR]","0","Search"]
             ]
 			

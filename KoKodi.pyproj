@@ -39,9 +39,10 @@
     <Folder Include="plugin.video.hellokoko\" />
     <Folder Include="plugin.video.hellokoko\resources\" />
     <Folder Include="plugin.video.hellokoko\resources\lib\" />
+    <Folder Include="repository.hellox\" />
+    <Folder Include="repository.hellox\repository.hellox\" />
     <Folder Include="resources\" />
     <Folder Include="resources\lib\" />
-    <Folder Include="repository.jbix.net\" />
     <Folder Include="repository.jbix.net\" />
   </ItemGroup>
   <ItemGroup>
@@ -51,10 +52,11 @@
     <Content Include="plugin.video.hellokoko\icon.png" />
     <Content Include="plugin.video.hellokoko\LICENSE.txt" />
     <Content Include="plugin.video.hellokoko\resources\settings.xml" />
-    <Content Include="repository.jbix.net\addon.xml" />
-    <Content Include="repository.jbix.net\changelog.txt" />
-    <Content Include="repository.jbix.net\fanart.jpg" />
-    <Content Include="repository.jbix.net\icon.png" />
+    <Content Include="repository.hellox\addons.xml" />
+    <Content Include="repository.hellox\repository.hellox\addon.xml" />
+    <Content Include="repository.hellox\repository.hellox\changelog.txt" />
+    <Content Include="repository.hellox\repository.hellox\fanart.jpg" />
+    <Content Include="repository.hellox\repository.hellox\icon.png" />
   </ItemGroup>
   <ItemGroup>
     <InterpreterReference Include="Global|PythonCore|2.7" />
