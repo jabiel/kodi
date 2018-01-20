@@ -23,35 +23,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="KoKodi.py" />
-    <Compile Include="plugin.video.hellokoko\default.py" />
-    <Compile Include="plugin.video.hellokoko\resources\lib\aadecode.py" />
-    <Compile Include="plugin.video.hellokoko\resources\lib\kokolib.py" />
-    <Compile Include="plugin.video.hellokoko\resources\lib\__init__.py" />
-    <Compile Include="plugin.video.hellokoko\resources\__init__.py" />
-    <Compile Include="resources\lib\aadecode.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="resources\lib\kokolib.py" />
-    <Compile Include="resources\lib\__init__.py" />
-    <Compile Include="resources\__init__.py" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="plugin.video.hellokoko\" />
-    <Folder Include="plugin.video.hellokoko\resources\" />
-    <Folder Include="plugin.video.hellokoko\resources\lib\" />
     <Folder Include="repository.hellox\" />
     <Folder Include="repository.hellox\repository.hellox\" />
-    <Folder Include="resources\" />
-    <Folder Include="resources\lib\" />
     <Folder Include="repository.jbix.net\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="plugin.video.hellokoko\addon.xml" />
-    <Content Include="plugin.video.hellokoko\changelog.txt" />
-    <Content Include="plugin.video.hellokoko\fanart.jpg" />
-    <Content Include="plugin.video.hellokoko\icon.png" />
-    <Content Include="plugin.video.hellokoko\LICENSE.txt" />
-    <Content Include="plugin.video.hellokoko\resources\settings.xml" />
     <Content Include="repository.hellox\addons.xml" />
     <Content Include="repository.hellox\repository.hellox\addon.xml" />
     <Content Include="repository.hellox\repository.hellox\changelog.txt" />

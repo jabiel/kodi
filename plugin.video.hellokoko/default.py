@@ -2,7 +2,7 @@
 import re, os, time, sys
 import urllib, urllib2, urlparse
 import xbmcplugin, xbmcgui, xbmcaddon
-from resources.lib import kokolib
+from resources.lib import kokolib, hellotools
 
 
 addon       = xbmcaddon.Addon()
@@ -12,15 +12,13 @@ sysaddon = sys.argv[0]
 xbmcplugin.setContent(addon_handle, 'movies')
 cookieFile = 'koko.cookie'
 
-line1 = "Hello swiecei!"
-line2 = "Tu mowi Jaroslaw"
-line3 = "Z kodiego"
-
 baseUrl = 'http://kokosik1207.pl'
 
 mainMenu = [
              ["[COLOR=blue]Ostatnio dodane[/COLOR]",'/newposts/',"FilmList"],
              ["Seriale",'/seriale/',"FilmList"],
+             ["Kolekcje filmowe",'/kolekcje-filmowe',"FilmList"],
+             ["Filmy na prosbe",'/filmy-na-prosbe',"FilmList"],
 			 ["Gatunek",'g',"SubCategory"],
 			 ["Wersja",'w',"SubCategory"],
 			 ["Rok",'r',"SubCategory"],
@@ -97,7 +95,7 @@ def subCategory(url):
 	xbmcplugin.endOfDirectory(addon_handle)
 
 def filmList(url):
-    html = kokolib.httpRequest({ 'url':url,  'use_cookie': True, 'cookiefile': cookieFile, 'save_cookie': False, 'load_cookie': True, 'return_data': True })
+    html = hellotools.httpRequest({ 'url':url,  'use_cookie': True, 'cookiefile': cookieFile, 'save_cookie': False, 'load_cookie': True, 'return_data': True })
     movieList = kokolib.getTitleList(html)
     pageing = kokolib.getNextPage(html)
     for mm in movieList:
@@ -114,13 +112,27 @@ def play2(stream_url):
 	listitem = xbmcgui.ListItem("play2")
 	xbmc.Player().play(stream_url, listitem)
 
+# uses urlresolver - but urlresolver is shitty
+#def findAndPlayStream(url):
+#	try:
+#		import urlresolver
+#		movieUrl = urlresolver.resolve(url)
+#		if isinstance(movieUrl, basestring):
+#			play2(movieUrl)
+#		else:
+#			xbmcgui.Dialog().ok(addonname, 'Brak filmu', 'Info: %s' % movieUrl) 
+#	except urlresolver.resolver.ResolverError as e:
+#		xbmcgui.Dialog().ok(addonname, 'ResolverError: %s' % e) 
+#	except:
+#		xbmcgui.Dialog().ok(addonname, 'KokoError: %s' % str(sys.exc_info()[0]), str(sys.exc_info()[1]), str(sys.exc_info()[2])) #traceback.format_exc()
+	
 def findAndPlayStream(url):
 	movieUrl = kokolib.findMovieUrl(url)	
 	if movieUrl[0]:
 		play2(movieUrl[1])
 	else:
 		xbmcgui.Dialog().ok(addonname, movieUrl[1])  
-#
+
 def checkHasCredentials():
 	if not addon.getSetting('kokosik.user') or not addon.getSetting('kokosik.pass'):
 		xbmcgui.Dialog().ok(addonname, 'Zaloguj sie', 'Aby ogladac filmy musisz byc zalogowany')  
@@ -134,7 +146,7 @@ def isLoggedin(html):
 def login():
 	query_data = { 'url': 'http://kokosik1207.pl/', 'use_cookie': True, 'cookiefile': cookieFile, 'save_cookie': True, 'load_cookie': False, 'use_post': True, 'return_data': True }
 	loginData   = { 'login_name': addon.getSetting('kokosik.user'), 'login_password': addon.getSetting('kokosik.pass'), 'login':'submit' }
-	html = kokolib.httpRequest(query_data, loginData)
+	html = hellotools.httpRequest(query_data, loginData)
 	loggedin = isLoggedin(html)
 	xbmcgui.Dialog().ok(addonname, 'Podane login lub haslo sa nieprawidlowe', addon.getSetting('kokosik.user') + ":" + addon.getSetting('kokosik.pass'))  
 	return loggedin
@@ -142,7 +154,7 @@ def login():
 
 def movieDetails(url):
 	query_data2 = { 'url': url, 'use_cookie': True, 'cookiefile': cookieFile, 'save_cookie': False, 'load_cookie': True, 'return_data': True }
-	html = kokolib.httpRequest(query_data2)
+	html = hellotools.httpRequest(query_data2)
 	loggedin = isLoggedin(html)
 	if(not loggedin):
 		checkHasCredentials()
@@ -151,9 +163,10 @@ def movieDetails(url):
 			html = kokolib.httpRequest(query_data2)
 		
 	lst = kokolib.listVideoProviders(html)
+	movie = kokolib.getTitleList(html)[0]
 	for z in lst:
-		info = { "plot":z[3], "title":"aaa", "rating":"4" }
-		addMenu(z[0] + " " + z[1] + " "+ z[2],z[3],'FindAndPlay',True, '', info)
+		info = { "plot":str(movie[1]) + "\n" + movie[3] + "\n\n" + z[3], "title":movie[1], "rating":"4" }
+		addMenu(z[0] + " " + z[1] + " "+ z[2],z[3],'FindAndPlay', True, '', info, '', False, movie[4])
 		
 	xbmcplugin.endOfDirectory(addon_handle)
 
@@ -168,7 +181,7 @@ def inputSearchText(text=''):
 def search(key):
     query_data = { 'url': 'http://kokosik1207.pl/', 'use_cookie': True, 'cookiefile': cookieFile, 'save_cookie': False, 'load_cookie': True, 'use_post': True, 'return_data': True }
     postData   = { 'do': 'search', 'subaction':'search', 'story':key, 'x':'0', 'y':'0' }
-    html = kokolib.httpRequest(query_data, postData)
+    html = hellotools.httpRequest(query_data, postData)
     data = kokolib.parseSearchHtml(html)
 
     for mm in data:

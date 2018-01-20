@@ -3,25 +3,28 @@
 # from resources.lib import aadecode
 import re
 import json
-import imp
+import imp, urllib2
 kokolib = imp.load_source('kokolib', '.\\plugin.video.hellokoko\\resources\\lib\\kokolib.py')
 	
 # kokolib.findMovieUrl('http://videowood.tv/embed/1b0v5')
 # print kokolib.findMovieUrl('https://streamango.com/embed/aaqnampnkmslmkea/Salut_7_2017_PLSUBBED_WEB-DL_XViD-MX_avi')
 # print kokolib.findMovieUrl('http://videowood.tv/embed/1awcb')
-print kokolib.findMovieUrl('https://www.raptu.com/e/FIDVTFGYVO')
+# print kokolib.findMovieUrl('https://www.raptu.com/e/FIDVTFGYVO')
 #kokolib.Streamango().getMediaUrl(html)
 # znalezione na stronie kokosika w javascrypcie
-#defalc13="Vidto^$2^$0^$%@%ivqgb.zr/rzorq-dibclbsn98w1-640k360.ugzy^%^Vidto^$2^$1^$%@%ivqgb.zr/rzorq-ghqg1lxau7we-640k360.ugzy^%^Vidto^$0^$0^$^%^Vidto^$0^$0^$^%^Videowood^$2^$0^$%@%ivqrbjbbq.gi/rzorq/1nhk6^%^Videowood^$0^$0^$^%^Videowood^$0^$0^$^%^Videowood^$0^$0^$^%^Fileone^$2^$0^$%@%svyrbar.gi/i/59fee045f09fd^%^Fileone^$2^$1^$%@%svyrbar.gi/i/59fee0a1c3aa8^%^Fileone^$0^$0^$^%^Fileone^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^^$0^$0^$^%^Streamango VIP^$2^$0^$f%@%fgernznatb.pbz/rzorq/zabfyxdeqbngfeea/Ohaalzna_Iratrnapr_2017_CY_FHOORQ_JRO-QY_KIvQ-ZBEF_niv^%^Streamango VIP^$2^$1^$f%@%fgernznatb.pbz/rzorq/rcpgdbxgyaqgepcn/Ohaalzna_Iratrnapr_2017_CY_FHOORQ_480c_JRO-QY_KIvQ_NP3-ZBEF_niv^%^Streamango VIP^$2^$2^$^%^Streamango VIP^$0^$0^$^%^Streamango VIP^$0^$0^$^%^Streamango VIP^$0^$0^$^%^Openload VIP^$2^$0^$f%@%bcraybnq.pb/rzorq/d4CojzfCbY4/Ohaalzna_Iratrnapr_%282017%29_CY.FHOORQ.JRO-QY.KIvQ-ZBEF.niv^%^Openload VIP^$2^$1^$^%^Openload VIP^$2^$2^$^%^Openload VIP^$0^$0^$^%^Openload VIP^$0^$0^$^%^Openload VIP^$0^$0^$"
+#defalc13="0^$0^$^$f%@%hcgbfgernz.pbz/vsenzr/uwyd43zlmk4m^%^0^$0^$^$f%@%bcraybnq.vb/rzorq/61neD-PZRIV/^%^0^$0^$^$%@%ivqgb.zr/rzorq-reyhv5jg3fmp-675k450.ugzy^%^"
 #tmpll = kokolib.decryptDefalc13(defalc13)
 #print tmpll
-#f = open('kokosik_lista.html')
+
+print urllib2.urlopen("http://google.pl").read()
+
+#f = open('koko_pageing.html')
 #html = f.read()
 
-#list3 = kokolib.getTitleList('http://kokosik1207.pl/filmy/akcja/')
+#list3 = kokolib.getTitleList(html)
 #print 'list3:'
 #for l in list3:
-#	print l[0] + " " + l[1]
+#	print  l[1] + " " + l[3]
 
 #query_data = { 'url': 'http://kokosik1207.pl/', 'use_cookie': True, 'cookiefile': 'koko.cookie', 'save_cookie': True, 'load_cookie': False, 'use_post': True, 'return_data': True }
 #loginData   = { 'login_name': 'mojjj', 'login_password': 'jfucker', 'login':'submit' }

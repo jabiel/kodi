@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import re, os.path
-import urllib, urllib2, urlparse, cookielib
+#import urllib, urllib2, urlparse, cookielib
 import string, json
-import xbmcgui
-from resources.lib import aadecode
-
+#import xbmcgui
+from resources.lib.resolver import movieurl
+from resources.lib import hellotools
 
 rot13 = string.maketrans( 
     "ABCDEFGHIJKLMabcdefghijklmNOPQRSTUVWXYZnopqrstuvwxyz", 
@@ -14,7 +14,8 @@ quality_arr = {
     '0': '360p',
     '1': '480p',
     '2': '720p',
-    '3': '1080p'
+    '3': '1080p',
+    '':''
 }
 
 lang_arr = {
@@ -30,43 +31,9 @@ lang_arr = {
     '9': 'Napisy PL / Dubbing',
     '10': 'Lektor PL / Dubbing',
     '11': 'Dubbing KINO',
-    '12': 'Inne'
+    '12': 'Inne',
+    '':''
 }
-
-def removeDuplicates(seq):
-    seen = set()
-    seen_add = seen.add
-    return [x for x in seq if not (x in seen or seen_add(x))]
-
-def stripHtml(text):
-    return re.compile(r'(<!--.*?-->|<[^>]*>)').sub('', text).replace('&raquo;','').strip()
-
-#def webRequestString(url):
-#        req = urllib2.Request(url)
-#        req.add_header('User-Agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0')
-
-#        try:
-#            response = urllib2.urlopen(req)
-#            link=response.read()
-#            response.close()
-#        except:
-#            link=''
-#        return link
-
-def repPolChars(txt):
-        txt = txt.replace('\xc4\x85','a').replace('\xc4\x84','A')
-        txt = txt.replace('\xc4\x87','c').replace('\xc4\x86','C')
-        txt = txt.replace('\xc4\x99','e').replace('\xc4\x98','E')
-        txt = txt.replace('\xc5\x82','l').replace('\xc5\x81','L')
-        txt = txt.replace('\xc5\x84','n').replace('\xc5\x83','N')
-        txt = txt.replace('\xc3\xb3','o').replace('\xc3\x93','O')
-        txt = txt.replace('\xc5\x9b','s').replace('\xc5\x9a','S')
-        txt = txt.replace('\xc5\xba','z').replace('\xc5\xb9','Z')
-        txt = txt.replace('\xc5\xbc','z').replace('\xc5\xbb','Z')
-        return txt
-
-# publics
-
 
 def getNextPage(html):
     pageshtml = re.compile('<div class="paginator"(.*?)</div>', re.DOTALL).findall(html)
@@ -80,6 +47,7 @@ def getNextPage(html):
 def decryptDefalc13(dec13):
     decList = dec13.split("^%^")
     result = list()
+    
     for dec in decList:
         pp = dec.split("^$")
         if(isinstance(pp, list) and len(pp)>2 and len(pp[3]) > 2):
@@ -89,170 +57,13 @@ def decryptDefalc13(dec13):
     return result
 
 def listVideoProviders(html):
-    #query_data2 = { 'url': url, 'use_cookie': True, 'cookiefile': 'koko.cookie', 'save_cookie': False, 'load_cookie': True, 'return_data': True }
-    #html = httpRequest(query_data2)
-    
     list2 = re.compile('defalc13="(.*?)"').findall(html)
     return decryptDefalc13(list2[0])
 
 
-
-dbg = True
-
-def httpRequest(params = {}, post_data = None):
-
-    #print('params=',params)
-    #print('post_data=',post_data)
-    #self.proxyURL = '84.10.15.134:8080'
-    #self.proxyURL = '178.217.113.62:8080'
-    #self.useProxy = True
-
-    def urlOpen(req, customOpeners):
-        if len(customOpeners) > 0:
-            opener = urllib2.build_opener( *customOpeners )
-            response = opener.open(req)
-        else:
-            response = urllib2.urlopen(req)
-        return response
-
-    cj = cookielib.LWPCookieJar()
-
-    response = None
-    req      = None
-    out_data = None
-    opener   = None
-
-    if 'header' in params:
-        headers = params['header']
-    else:
-        headers = { 'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0' }
-
-    customOpeners = []
-    #cookie support
-    if 'use_cookie' not in params and 'cookiefile' in params and ('load_cookie' in params or 'save_cookie' in params):
-        params['use_cookie'] = True
-
-    if params.get('use_cookie', False):
-        customOpeners.append( urllib2.HTTPCookieProcessor(cj) )
-        if params.get('load_cookie', False) and os.path.isfile(params['cookiefile']) :
-            cj.load(params['cookiefile'], ignore_discard = True)
-    #proxy support
-    #if self.useProxy == True:
-    #    if dbg == True: print('getURLRequestData USE PROXY')
-    #    customOpeners.append( urllib2.ProxyHandler({"http":self.proxyURL}) )
-
-    if None != post_data:
-        if dbg == True: print('pCommon - getURLRequestData() -> post data: ' + str(post_data))
-        if params.get('raw_post_data', False):
-            dataPost = post_data
-        else:
-            dataPost = urllib.urlencode(post_data)
-            #print('dataPost,headers=',dataPost,headers)
-        req = urllib2.Request(params['url'], dataPost, headers)
-    else:
-        req = urllib2.Request(params['url'], None, headers)
-
-    if not params.get('return_data', False):
-        out_data = urlOpen(req, customOpeners)
-    else:
-        gzip_encoding = False
-        try:
-            response = urlOpen(req, customOpeners)
-            if response.info().get('Content-Encoding') == 'gzip':
-                gzip_encoding = True
-            data = response.read()
-            response.close()
-        except urllib2.URLError, e:
-            if hasattr(e, 'code'):
-                """
-                if HTTP_ERRORS[e.code]:
-                    kom = HTTP_ERRORS[e.code]
-                else:
-                    kom=''
-                """
-                try:
-                    kom = HTTP_ERRORS[e.code]
-                except:
-                    kom=''
-                print 'HTTP Error '+str(e.code) + ' ' + kom
-                xbmcgui.Dialog().ok('HTTP Error', 'kod: '+str(e.code),kom)
-                out_data = '' #'Error HTTP:' + str(e.code)
-                data = '' # self.net.http_GET(self.url, headers=self.headers).content.decode('unicode_escape')
-                #print ('Błąd HTTP: '+str(e.code) +' url='+params['url'])
-            elif hasattr(e, 'reason'):
-                xbmcgui.Dialog().ok('Błąd URL', str(e.reason))
-                data = 'Error URL:' + str(e.reason)
-
-        if gzip_encoding:
-            print('pCommon - getURLRequestData() -> Content-Encoding == gzip')
-            buf = StringIO(data)
-            f = gzip.GzipFile(fileobj=buf)
-            out_data = f.read()
-        else:
-            out_data = data
-
-    if params.get('use_cookie', False) and params.get('save_cookie', False):
-        #self.checkDir(ptv.getAddonInfo('path') + os.path.sep + "cookies")
-        cj.save(params['cookiefile'], ignore_discard = True)
-
-    return out_data
 # retuurn True, url or False, Error message
 def findMovieUrl(url):
-    html = httpRequest({ 'url': url, 'return_data': True, 'header':{ 'User-Agent' : 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:53.0) Gecko/20100101 Firefox/53.0', 'referer':'http://kokosik1207.pl/2678-movie.html' } })
-    if not html:
-        return False, 'Link nie dziala'
-    if("videowood.tv" in url):
-        addrscr = aadecode.decode(html)
-        # xbmcgui.Dialog().ok('Videowood', addrscr, '')
-        if addrscr:
-            addr = re.compile("http:(.*?).mp4").findall(addrscr)
-            if(len(addr)>0):
-                return True, "http:" + addr[0] + ".mp4"
-            return False, "Nie znalazlem filmu na videowood.tv"
-        return False, "Nie znalazlem aacode na videowood.tv"
-
-    if ("vidto.me" in url):
-        addr = re.compile('file:"(.*?)"').findall(html)
-        if(len(addr)>0):
-                return True, addr[0]
-        return False, "Nie znalazlem filmu na vidto.me" 
-
-    if ("fileone.tv" in url):
-        addr = re.compile("file: '(.*?)'").findall(html)
-        if(len(addr)>0):
-                return True, addr[0]
-        return False, "Nie znalazlem filmu na fileone.tv" 
-
-    if ("stormo.tv" in url): # https://www.stormo.tv/embed/209929/
-        addr = re.compile("file: '(.*?)'").findall(html)
-        if(len(addr)>0):
-            return True, addr[0]
-        return False, "Nie znalazlem filmu na stormo.tv"
-    if("openload." in url): # https://openload.co/embed/CHGRbVp4xiU
-        movieParams = re.compile('(?://|\.)(openload\.(?:io|co))/(?:embed|f)/([0-9a-zA-Z-_]+)').findall(url)[0] # ('openload.co', 'CHGRbVp4xiU')
-        apiUrl = 'https://api.openload.co/1/streaming/get?file=' + movieParams[1]
-        jss = httpRequest({ 'url': apiUrl, 'return_data': True })
-        zz = json.loads(jss)
-        if(zz['status'] != 200):
-            return False, zz['msg'] # IP address not authorized. Visit https:\/\/olpair.com
-        return True, zz['result']['url']
-    if("streamango." in url): # https://streamango.com/embed/qkketdbklaobbded
-        maddr = Streamango().getMediaUrl(html)
-        if maddr:
-            return True, maddr 
-        return False, 'Nie znalazłem filmu na streamango'
-
-    if("raptu." in url or 'rapidvideo.' in url): # https://www.raptu.com/e/FIDVTFGYVO
-        addr = re.compile('sources": \[\{"file":"(.*?)"').findall(html)
-        if(len(addr)>0):
-                murll = addr[0].replace('\\/','/')
-                return True, murll
-        return False, "Nie znalazlem filmu na rapidvideo" 
-
-    if("stremplay." in url): 
-        return False, "jeszcze nie dziala" 
-    
-    return False, "Nie znam takiego providera " + url
+    return movieurl.findMovieUrl(url)
 
 def parseSearchHtml(html):
     rr = re.compile('<div class="News">(.*?)<div class="viewn_details">(.*?)</span>', re.DOTALL).findall(html)
@@ -261,82 +72,36 @@ def parseSearchHtml(html):
     uu = re.compile('<div class="viewn_open"><a href="(.*?)"', re.DOTALL).findall(html)
     result = []
     for idx, val in enumerate(rr):
-        result.append((stripHtml(val[1]), stripHtml(yy[idx]),stripHtml(uu[idx]), stripHtml(tt[idx])))
+        result.append((hellotools.stripHtml(val[1]), hellotools.stripHtml(yy[idx]), hellotools.stripHtml(uu[idx]), hellotools.stripHtml(tt[idx])))
     return result
 
 
 # getTitleList returns list of movies from given url
 def getTitleList(html):
-    html = repPolChars(html)
+    html = hellotools.repPolChars(html)
     list2 = re.compile('news-title"><a href="(.*?)">(.*?)<').findall(html)
     #list3 = removeDuplicates(list2)
     genres = re.compile('\| Kategoria:(.*?)</span>').findall(html)
     descs = re.compile('<div class="movie-desc">(.*?)</div>', re.DOTALL).findall(html)
+    rates = re.compile('title="OCENA FILMWEB"/>(.*?)</div>', re.DOTALL).findall(html)
     imgList = re.compile('yt-c fullfeature(.*?)<div', re.DOTALL).findall(html)
     
     imgSrc = re.compile('<img src="(.*?)"')
     result = []
     for idx, val in enumerate(list2):
         title = val[1].replace('*','')
-        genr = stripHtml(genres[idx]).replace('&raquo;','')      
+        genr = hellotools.stripHtml(genres[idx]).replace('&raquo;','')      
         imgs = imgSrc.findall(imgList[idx])
         img = ''
         if len(imgs)>0:
             img = imgs[0]
         # print img
-
-        result.append((val[0], title, stripHtml(genres[idx]),stripHtml(descs[idx]), img))
-    return result
-
-
-class Streamango():
-    def decode(self, encoded, code):
-        #from https://github.com/jsergio123/script.module.urlresolver - kodi vstream
-        _0x59b81a = ""
-        k = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/='
-        k = k[::-1]
-
-        count = 0
-
-        for index in range(0, len(encoded) - 1):
-            while count <= len(encoded) - 1:
-                _0x4a2f3a = k.index(encoded[count])
-                count += 1
-                _0x29d5bf = k.index(encoded[count])
-                count += 1
-                _0x3b6833 = k.index(encoded[count])
-                count += 1
-                _0x426d70 = k.index(encoded[count])
-                count += 1
-
-                _0x2e4782 = ((_0x4a2f3a << 2) | (_0x29d5bf >> 4))
-                _0x2c0540 = (((_0x29d5bf & 15) << 4) | (_0x3b6833 >> 2))
-                _0x5a46ef = ((_0x3b6833 & 3) << 6) | _0x426d70
-                _0x2e4782 = _0x2e4782 ^ code
-
-                _0x59b81a = str(_0x59b81a) + chr(_0x2e4782)
-
-                if _0x3b6833 != 64:
-                    _0x59b81a = str(_0x59b81a) + chr(_0x2c0540)
-                if _0x3b6833 != 64:
-                    _0x59b81a = str(_0x59b81a) + chr(_0x5a46ef)
-
-        return _0x59b81a
-
-    def getMediaUrl(self, sourceCode):
-        #sourceCode = self.net.http_GET(self.url, headers=self.headers).content.decode('unicode_escape')
+        filmwebrate = "\n"
+        try:
+            filmwebrate = " [COLOR=yellow]Filmweb: " + hellotools.stripHtml(rates[idx])+"[/COLOR]\n"
+        except :
+            pass
         
-        videoUrl = ''
-        resultado = re.search('''srces\.push\({type:"video/mp4",src:\w+\('([^']+)',(\d+)''', sourceCode)
 
-        if resultado:
-            source = self.decode(resultado.group(1), int(resultado.group(2)))
-            if source:
-                source = "http:%s" % source if source.startswith("//") else source
-                source = source.split("/")
-                if not source[-1].isdigit():
-                    source[-1] = re.sub('[^\d]', '', source[-1])
-                videoUrl = "/".join(source)
-
-        return videoUrl
-
+        result.append((val[0], title, hellotools.stripHtml(genres[idx]), filmwebrate + hellotools.stripHtml(descs[idx]), img))
+    return result

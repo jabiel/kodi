@@ -1,0 +1,68 @@
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>1c2c7443-0a06-4bf0-8a55-7a3637857455</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>
+    </StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>plugin.video.hellokoko</Name>
+    <RootNamespace>plugin.video.hellokoko</RootNamespace>
+    <InterpreterId>Global|PythonCore|2.7-32</InterpreterId>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="default.py" />
+    <Compile Include="resources\lib\hellotools.py" />
+    <Compile Include="resources\lib\kokolib.py" />
+    <Compile Include="resources\lib\resolver\aadecode.py" />
+    <Compile Include="resources\lib\resolver\movieurl.py" />
+    <Compile Include="resources\lib\resolver\packer.py" />
+    <Compile Include="resources\lib\resolver\streamango.py" />
+    <Compile Include="resources\lib\resolver\__init__.py" />
+    <Compile Include="resources\lib\__init__.py" />
+    <Compile Include="resources\__init__.py" />
+    <Compile Include="tests\kokolib_test.py" />
+    <Compile Include="tests\movieresolver_test.py">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="tests\" />
+    <Folder Include="resources\" />
+    <Folder Include="resources\lib\" />
+    <Folder Include="resources\lib\resolver\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="addon.xml" />
+    <Content Include="changelog.txt" />
+    <Content Include="fanart.jpg" />
+    <Content Include="icon.png" />
+    <Content Include="LICENSE.txt" />
+    <Content Include="resources\lib\resolver\movieurl.pyc" />
+    <Content Include="resources\settings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|PythonCore|2.7-32" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
+  <!-- Uncomment the CoreCompile target to enable the Build command in
+       Visual Studio and specify your pre- and post-build commands in
+       the BeforeBuild and AfterBuild targets below. -->
+  <!--<Target Name="CoreCompile" />-->
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+</Project>

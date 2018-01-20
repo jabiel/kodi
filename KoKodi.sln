@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "KoKodi", "KoKodi.pyproj", "{3DC28522-2CF7-4E41-A047-34228F4B8181}"
+EndProject
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "plugin.video.hellokoko", "plugin.video.hellokoko\plugin.video.hellokoko.pyproj", "{1C2C7443-0A06-4BF0-8A55-7A3637857455}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +15,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{3DC28522-2CF7-4E41-A047-34228F4B8181}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3DC28522-2CF7-4E41-A047-34228F4B8181}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C2C7443-0A06-4BF0-8A55-7A3637857455}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C2C7443-0A06-4BF0-8A55-7A3637857455}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
