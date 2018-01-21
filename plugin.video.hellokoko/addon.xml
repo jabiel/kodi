@@ -12,7 +12,7 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary>Wtyczka Hello Koko</summary>
-    <description>Wtyczka pozwala ogladac filmy z servera kokosik1207.pl</description>
+    <description>Wtyczka pozwala ogladac filmy z servera kokos***1207.pl</description>
     <platform>all</platform>
   </extension>
 </addon>

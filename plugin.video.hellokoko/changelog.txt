@@ -1,4 +1,7 @@
-﻿[COLOR gold]wersja 2017.11.10[/COLOR]
+﻿[COLOR gold]wersja 2018.01.21[/COLOR]
+- Hosted on  github
+
+[COLOR gold]wersja 2017.11.10[/COLOR]
 - Search 
 - Movie info
 
