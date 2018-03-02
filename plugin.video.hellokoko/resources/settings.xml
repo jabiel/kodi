@@ -3,7 +3,7 @@
   <category label="Ustawienia">
     <setting type="lsep" label="Kokosik" />
     <setting id="kokosik.user" type="text" label="Nazwa uzytkownika" default="" />
-    <setting id="kokosik.pass" type="text" option="hidden" visible="true" label="Haslo" default="" />
+    <setting id="kokosik.pass" type="text" visible="true" label="Haslo" default="" />
     <setting id="kokosik.cookie" type="text" visible="false" default="" />
 
     <setting type="lsep" />
