@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="repository.hellox" name="HellOX add-ons" version="2.0.0" provider-name="HellOX">
 	<extension point="xbmc.addon.repository" name="HellOX Add-on Repository">
-		<info compressed="false">http://jabiel.github.io/kodi/repository.hellox/addons.xml</info>
-		<checksum>http://jabiel.github.io/kodi/repository.hellox/addons.xml.md5</checksum>
-		<datadir zip="true">http://jabiel.github.io/kodi/repository.hellox/</datadir>
+		<info compressed="false">http://jabiel.github.io/kodi/repo/addons.xml</info>
+		<checksum>http://jabiel.github.io/kodi/repo/addons.xml.md5</checksum>
+		<datadir zip="true">http://jabiel.github.io/kodi/</datadir>
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<summary lang="pl">Repozytorium wtyczek</summary>
 		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
-		<forum>http://jabiel.github.io/kodi/repository.hellox/</forum>
-		<website>http://jabiel.github.io/kodi/repository.hellox/info.html</website>
+		<forum>http://jabiel.github.io/kodi/</forum>
+		<website>http://jabiel.github.io/kodi/</website>
 		<email>support@support.pl</email>
 	</extension>
 </addon>

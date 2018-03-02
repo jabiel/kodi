@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addons>
+<addon id="plugin.video.hellokoko" name="HelloKoko" version="2018.01.21" provider-name="HellOX">
+	<requires>
+		<import addon="xbmc.python" version="2.14.0"/>
+	</requires>
+	<extension point="xbmc.python.pluginsource"
+		library="default.py">
+	<provides>video</provides>
+    </extension>
+	<extension point="xbmc.addon.metadata">
+		<summary>Hello koko</summary>
+		<description>Wtyczka pozwala ogladac filmy z servera kokosik1207.pl</description>
+		<platform>all</platform>
+		<language>pl en</language>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<website>http://jabiel.gihub.io</website>
+		<forum>http://jabiel.gihub.io/forum</forum>
+		<source>http://jabiel.gihub.io</source>
+		<email>support@jabiel.pl</email>
+	</extension>
+</addon>
+
+<addon id="repository.hellox" name="HellOX add-ons" version="2.0.0" provider-name="HellOX Team">
+	<extension point="xbmc.addon.repository" name="HellOX Add-on Repository">
+		<info compressed="false">http://jabiel.gihub.io/kodi/repo/addons.xml</info>
+		<checksum>http://jabiel.gihub.io/kodi/repo/addons.xml.md5</checksum>
+		<datadir zip="true">http://jabiel.gihub.io/kodi/</datadir>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary lang="pl">Repozytorium wtyczek</summary>
+		<license>GNU GENERAL PUBLIC LICENSE. Version 2, June 1991</license>
+		<forum>http://jabiel.gihub.io/kodi/</forum>
+		<website>http://jabiel.gihub.io/</website>
+		<email>support@jabiel.pl</email>
+	</extension>
+</addon>
+
+</addons>
