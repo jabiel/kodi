@@ -10,7 +10,8 @@ addonname   = addon.getAddonInfo('name')
 addon_handle = int(sys.argv[1])
 sysaddon = sys.argv[0]
 xbmcplugin.setContent(addon_handle, 'movies')
-cookieFile = 'koko.cookie'
+COOKIEPATH  = unicode(addon.getAddonInfo('path') + os.path.sep + "cookies",'utf-8')
+cookieFile = COOKIEPATH + os.path.sep + 'koko.cookie'
 
 baseUrl = 'http://kokosik1207.pl'
 
@@ -198,6 +199,9 @@ def search(key):
 ## MAIN LOOP
 params = dict(urlparse.parse_qsl(sys.argv[2].replace('?','')))
 
+if not os.path.isdir(COOKIEPATH):
+	os.mkdir(COOKIEPATH)
+
 url = params.get('url') or None
 name = params.get('name') or None
 mode = params.get('mode') or None
@@ -228,7 +232,7 @@ elif mode=='Tools':
 elif mode=='Search':
         key = inputSearchText()
         if key:            
-			search(key)
+            search(key)
             #key=repPolChars(key)
             #addHistoryItem(my_addon_name, key)
             #xbmc.executebuiltin('Container.Refresh')

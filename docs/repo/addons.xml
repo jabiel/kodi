@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="plugin.video.hellokoko" name="HelloKoko" version="2018.01.21" provider-name="HellOX">
+<addon id="plugin.video.hellokoko" name="HelloKoko" version="2018.03.02" provider-name="HellOX">
 	<requires>
 		<import addon="xbmc.python" version="2.14.0"/>
 	</requires>
